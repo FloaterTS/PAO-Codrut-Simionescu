@@ -1,14 +1,23 @@
-package clase;
+package com.main;
 
+import com.components.*;
+import com.files.Audit;
+import com.files.FileManager;
+import com.helper.*;
+
+import java.io.IOException;
 import java.util.*;
 
 public class Main
 {
-
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
-        Agenda agendaMain = new Agenda();
-        Service serv = new Service();
+        Agenda agendaMain = Agenda.getAgenda();
+        Service serv = Service.getService();
+        FileManager fileManager = FileManager.getFileManager();
+        Audit audit = Audit.getAudit();
+
+        fileManager.loadAgenda();
 
         Scanner scn = new Scanner(System.in);
         int c, cc;
@@ -19,7 +28,7 @@ public class Main
             System.out.println("2. Afisati continutul agendei");
             System.out.println("3. Modificati continutul agendei");
             System.out.println("4. Stergeti continutul agendei");
-            System.out.println("0. Exit");
+            System.out.println("0. Save & Exit");
             c = scn.nextInt();
             scn.nextLine();
             switch (c)
@@ -77,8 +86,9 @@ public class Main
                             System.out.print("Important? (y/n): ");
                             String im = scn.nextLine();
                             imp = im.equals("y");
-                            serv.sAddTask(agendaMain, num, job, desc, dt, ob, imp);
+                            serv.sAddTask(num, job, desc, dt, ob, imp);
                             System.out.println("Sarcina adaugata.\n");
+                            audit.saveQuery("Adaugare sarcina");
                         }
                         break;
                         case 2:
@@ -118,8 +128,9 @@ public class Main
                             System.out.print("Important? (y/n): ");
                             String im = scn.nextLine();
                             imp = im.equals("y");
-                            serv.sAddMeeting(agendaMain, zi, luna, an, job, desc, wb, fm, imp);
+                            serv.sAddMeeting(zi, luna, an, job, desc, wb, fm, imp);
                             System.out.println("Intalnire adaugata.\n");
+                            audit.saveQuery("Adaugare intalnire");
                         }
                         break;
                         case 3:
@@ -142,8 +153,9 @@ public class Main
                             System.out.print("Important? (y/n): ");
                             String im = scn.nextLine();
                             imp = im.equals("y");
-                            serv.sAddAlarm(agendaMain, ora, minut, reminder, imp);
+                            serv.sAddAlarm(ora, minut, reminder, imp);
                             System.out.println("Alarma adaugata.\n");
+                            audit.saveQuery("Adaugare alarma");
                         }
                         break;
                         case 0:
@@ -170,27 +182,32 @@ public class Main
                     {
                         case 1:
                         {
-                            serv.selectTasks(agendaMain, -1, false);
+                            serv.selectTasks(-1, false);
+                            audit.saveQuery("Afisare sarcini");
                         }
                         break;
                         case 2:
                         {
-                            serv.selectMeets(agendaMain, -1, false);
+                            serv.selectMeets(-1, false);
+                            audit.saveQuery("Afisare intalniri");
                         }
                         break;
                         case 3:
                         {
-                            serv.selectAlarms(agendaMain, -1, false);
+                            serv.selectAlarms(-1, false);
+                            audit.saveQuery("Afisare alarme");
                         }
                         break;
                         case 4:
                         {
-                            serv.selectAll(agendaMain, -1, false);
+                            serv.selectAll(-1, false);
+                            audit.saveQuery("Afisare continut intreg");
                         }
                         break;
                         case 5:
                         {
-                            serv.selectAll(agendaMain, -1, true);
+                            serv.selectAll(-1, true);
+                            audit.saveQuery("Afisare continut important");
                         }
                         break;
                         case 0:
@@ -204,7 +221,7 @@ public class Main
                 break;
                 case 3:
                 {
-                    int noId, nrIds = serv.selectAll(agendaMain, 0, false);
+                    int noId, nrIds = serv.selectAll(0, false);
                     if(nrIds != 0)
                     {
                         System.out.print("Id corespunzator (1 - " + nrIds + "): ");
@@ -238,6 +255,7 @@ public class Main
                                     String titlu = scn.nextLine();
                                     agendaMain.getAllTasks().get(noId).setTitle(titlu);
                                     System.out.println("Titlul sarcinii a fost modificat.");
+                                    audit.saveQuery("Schimbare titlu sarcina");
                                 }
                                 break;
                                 case 2:
@@ -246,6 +264,7 @@ public class Main
                                     String desc = scn.nextLine();
                                     agendaMain.getAllTasks().get(noId).setDescriere(desc);
                                     System.out.println("Descrierea sarcinii a fost modificata.");
+                                    audit.saveQuery("Schimbare descriere sarcina");
                                 }
                                 break;
                                 case 3:
@@ -255,6 +274,7 @@ public class Main
                                         System.out.println("Sarcina a fost setata ca fiind importanta!");
                                     else
                                         System.out.println("Sarcina a fost setata ca nemaifiind importanta.");
+                                    audit.saveQuery("Schimbare importanta sarcina");
                                 }
                                 break;
                                 case 4:
@@ -272,6 +292,7 @@ public class Main
                                         scn.nextLine();
                                         ((TaskJob) agendaMain.getAllTasks().get(noId)).setDeadline(new ZDate(zi, luna, an));
                                         System.out.println("Deadline-ul sarcinii a fost modificat.");
+                                        audit.saveQuery("Schimbare deadline sarcina");
                                     }
                                     else
                                     {
@@ -280,6 +301,7 @@ public class Main
                                             System.out.println("Sarcina a fost setata ca fiind obligatorie.");
                                         else
                                             System.out.println("Sarcina a fost setata ca fiind optionala.");
+                                        audit.saveQuery("Schimbare optionalitate sarcina ");
                                     }
                                 }
                                 break;
@@ -287,6 +309,7 @@ public class Main
                                 {
                                     agendaMain.removeTaskById(noId);
                                     System.out.println("Sarcina a fost stearsa.");
+                                    audit.saveQuery("Stergere sarcina");
                                 }
                                 break;
                                 case 6:
@@ -295,6 +318,7 @@ public class Main
                                     {
                                         ((TaskJob) agendaMain.getAllTasks().get(noId)).setDeadline(null);
                                         System.out.println("Deadline-ul a fost eliminat.");
+                                        audit.saveQuery("Eliminare deadline sarcina");
                                     }
                                     else
                                         System.out.println("Optiune invalida.");
@@ -341,6 +365,7 @@ public class Main
                                     agendaMain.getAllMeets().get(noId).setDate(new ZDate(zi, luna, an));
                                     Collections.sort(agendaMain.getAllMeets());
                                     System.out.println("Data intalnirii a fost modificata.");
+                                    audit.saveQuery("Schimbare data intalnire");
                                 }
                                 break;
                                 case 2:
@@ -349,6 +374,7 @@ public class Main
                                     String desc = scn.nextLine();
                                     agendaMain.getAllMeets().get(noId).setDescriere(desc);
                                     System.out.println("Descrierea intalnirii a fost modificata.");
+                                    audit.saveQuery("Schimbare descriere intalnire");
                                 }
                                 break;
                                 case 3:
@@ -358,6 +384,7 @@ public class Main
                                         System.out.println("Intalnirea a fost setata ca fiind importanta!");
                                     else
                                         System.out.println("Intalnirea a fost setata ca nemaifiind importanta.");
+                                    audit.saveQuery("Schimbare importanta intalnire");
                                 }
                                 break;
                                 case 4:
@@ -369,6 +396,7 @@ public class Main
                                             System.out.println("Intalnirea a fost setata ca fiind cu conducerea.");
                                         else
                                             System.out.println("Intalnirea a fost setata ca fiind cazuala.");
+                                        audit.saveQuery("Schimbare cazualitate intalnire");
                                     }
                                     else
                                     {
@@ -377,6 +405,7 @@ public class Main
                                             System.out.println("Intalnirea a fost setata ca fiind cu familia.");
                                         else
                                             System.out.println("Intalnirea a fost setata ca fiind personala.");
+                                        audit.saveQuery("Schimbare colectivitate intalnire");
                                     }
                                 }
                                 break;
@@ -384,6 +413,7 @@ public class Main
                                 {
                                     agendaMain.removeMeetingById(noId);
                                     System.out.println("Intalnirea a fost stearsa.");
+                                    audit.saveQuery("Stergere intalnire");
                                 }
                                 break;
                                 case 0:
@@ -421,6 +451,7 @@ public class Main
                                     scn.nextLine();
                                     agendaMain.getAlarmById(noId).setTime(new ZTime(ora, minute));
                                     System.out.println("Ora alarmei a fost modificata.");
+                                    audit.saveQuery("Schimbare ora alarma");
                                 }
                                 break;
                                 case 2:
@@ -430,12 +461,14 @@ public class Main
                                         System.out.println("Alarma a fost setata ca fiind importanta!");
                                     else
                                         System.out.println("Alarma a fost setata ca nemaifiind importanta.");
+                                    audit.saveQuery("Schimbare importanta alarma");
                                 }
                                 break;
                                 case 3:
                                 {
                                     agendaMain.removeAlarmById(noId);
                                     System.out.println("Alarma a fost stearsa.");
+                                    audit.saveQuery("Stergere alarma");
                                 }
                                 break;
                                 case 4:
@@ -446,6 +479,7 @@ public class Main
                                         String rem = scn.nextLine();
                                         ((AlarmReminder)agendaMain.getAlarmById(noId)).setTextRemind(rem);
                                         System.out.println("Reminderul a fost modificat.");
+                                        audit.saveQuery("Schimbare reminder");
                                     }
                                     else
                                         System.out.println("Optiune invalida.");
@@ -469,12 +503,17 @@ public class Main
                 break;
                 case 4:
                 {
-                    serv.deleteContents(agendaMain);
+                    serv.deleteContents();
                     System.out.println("Continutul agendei a fost sters.\n");
+                    audit.saveQuery("Stergere intreg continut al agendei");
                 }
                 break;
                 case 0:
-                    break;
+                {
+                    audit.closeQuery();
+                    fileManager.saveAgenda();
+                }
+                break;
                 default:
                 {
                     System.out.println("Optiune invalida.");

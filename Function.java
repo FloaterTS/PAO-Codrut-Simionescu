@@ -1,6 +1,6 @@
-package clase;
+package com.helper;
 
-interface Function
+public interface Function
 {
     void getInfo();
 

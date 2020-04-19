@@ -1,5 +1,6 @@
-package clase;
-
+package com.components;
+import com.helper.ZTime;
+import com.helper.Function;
 import java.util.Objects;
 
 public class Alarm implements Function

@@ -1,4 +1,5 @@
-package clase;
+package com.components;
+import com.helper.Function;
 
 public abstract class Task implements Function
 {

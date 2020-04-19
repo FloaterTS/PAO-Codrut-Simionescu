@@ -1,4 +1,6 @@
-package clase;
+package com.components;
+import com.helper.ZDate;
+import com.helper.Function;
 
 public abstract class Meeting implements Function, Comparable<Meeting>
 {

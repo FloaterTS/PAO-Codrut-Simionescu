@@ -1,5 +1,5 @@
-package clase;
-
+package com.components;
+import com.helper.ZDate;
 
 public class TaskJob extends Task
 {
@@ -14,6 +14,11 @@ public class TaskJob extends Task
     public void setDeadline(ZDate _deadline)
     {
         deadline = _deadline;
+    }
+
+    public ZDate getDeadline()
+    {
+        return deadline;
     }
 
     public void getInfo()

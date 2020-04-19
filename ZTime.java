@@ -1,4 +1,4 @@
-package clase;
+package com.helper;
 
 public class ZTime
 {

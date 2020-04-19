@@ -1,11 +1,26 @@
-package clase;
-
+package com.main;
+import com.components.*;
+import com.helper.*;
 import java.util.*;
 
 public class Service
 {
+    private static Service service = null;
+    Agenda agendaMain;
 
-    public void sAddTask(Agenda agendaMain, String titlu, boolean job, String desc, ZDate deadline, boolean obl, boolean important)
+    private Service()
+    {
+        agendaMain = Agenda.getAgenda();
+    }
+
+    public static Service getService()
+    {
+        if (service == null)
+            service = new Service();
+        return service;
+    }
+
+    public void sAddTask(String titlu, boolean job, String desc, ZDate deadline, boolean obl, boolean important)
     {
         Task t;
         if (job)
@@ -26,7 +41,7 @@ public class Service
         agendaMain.addTask(t);
     }
 
-    public void sAddMeeting(Agenda agendaMain, int zi, int luna, int an, boolean job, String desc, boolean withBoss, boolean family, boolean important)
+    public void sAddMeeting(int zi, int luna, int an, boolean job, String desc, boolean withBoss, boolean family, boolean important)
     {
         Meeting m;
         if (job)
@@ -47,7 +62,7 @@ public class Service
         Collections.sort(agendaMain.getAllMeets());
     }
 
-    public void sAddAlarm(Agenda agendaMain, int ora, int minut, String rem, boolean important)
+    public void sAddAlarm(int ora, int minut, String rem, boolean important)
     {
         Alarm a;
         if (rem != null)
@@ -61,7 +76,7 @@ public class Service
         agendaMain.addAlarm(a);
     }
 
-    public void selectTasks(Agenda agendaMain, int id, boolean imp)
+    public void selectTasks(int id, boolean imp)
     {
         List<Task> tasks = agendaMain.getAllTasks();
         if(tasks.size() == 0)
@@ -88,7 +103,7 @@ public class Service
         System.out.print("\n");
     }
 
-    public void selectMeets(Agenda agendaMain, int id, boolean imp)
+    public void selectMeets(int id, boolean imp)
     {
         List<Meeting> meets = agendaMain.getAllMeets();
         if(meets.size() == 0)
@@ -115,7 +130,7 @@ public class Service
         System.out.print("\n");
     }
 
-    public void selectAlarms(Agenda agendaMain, int id, boolean imp)
+    public void selectAlarms(int id, boolean imp)
     {
         Set<Alarm> alarms = agendaMain.getAllAlarms();
         if(alarms.size() == 0)
@@ -140,23 +155,23 @@ public class Service
         System.out.print("\n");
     }
 
-    public int selectAll(Agenda agendaMain, int id, boolean imp)
+    public int selectAll(int id, boolean imp)
     {
         if(id != -1)
             id = 0;
-        selectTasks(agendaMain, id, imp);
+        selectTasks(id, imp);
         if(id != -1)
             id += agendaMain.getAllTasks().size();
-        selectMeets(agendaMain, id, imp);
+        selectMeets(id, imp);
         if(id != -1)
             id += agendaMain.getAllMeets().size();
-        selectAlarms(agendaMain, id, imp);
+        selectAlarms(id, imp);
         if(id != -1)
             id += agendaMain.getAllAlarms().size();
         return id;
     }
 
-    public void deleteContents(Agenda agendaMain)
+    public void deleteContents()
     {
         agendaMain.deleteAll();
     }

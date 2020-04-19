@@ -1,5 +1,6 @@
-package clase;
+package com.main;
 
+import com.components.*;
 import java.util.*;
 
 public class Agenda
@@ -8,11 +9,20 @@ public class Agenda
     private List<Meeting> meets;
     private Set<Alarm> alarms;
 
-    public Agenda()
+    private static Agenda agendaMain = null;
+
+    private Agenda()
     {
         tasks = new ArrayList<>();
         meets = new ArrayList<>();
         alarms = new HashSet<>();
+    }
+
+    public static Agenda getAgenda()
+    {
+        if(agendaMain == null)
+            agendaMain = new Agenda();
+        return agendaMain;
     }
 
     public List<Task> getAllTasks()

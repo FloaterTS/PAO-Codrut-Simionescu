@@ -1,4 +1,4 @@
-package clase;
+package com.components;
 
 public class MeetingJob extends Meeting
 {

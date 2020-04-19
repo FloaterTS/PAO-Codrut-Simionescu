@@ -1,5 +1,4 @@
-package clase;
-
+package com.components;
 
 public class MeetingHome extends Meeting
 {
