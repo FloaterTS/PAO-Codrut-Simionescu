@@ -24,14 +24,14 @@ public class FileManager
         return file_manager;
     }
 
-    public void saveAgenda() throws IOException
+    public void saveAgenda()
     {
         taskMgr.saveTasks();
         meetMgr.saveMeetings();
         alarmMgr.saveAlarms();
     }
 
-    public void loadAgenda() throws IOException
+    public void loadAgenda()
     {
         taskMgr.loadTasks();
         meetMgr.loadMeetings();

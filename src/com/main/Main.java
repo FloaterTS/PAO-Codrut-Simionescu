@@ -5,12 +5,11 @@ import com.files.Audit;
 import com.files.FileManager;
 import com.helper.*;
 
-import java.io.IOException;
 import java.util.*;
 
 public class Main
 {
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args)
     {
         Agenda agendaMain = Agenda.getAgenda();
         Service serv = Service.getService();

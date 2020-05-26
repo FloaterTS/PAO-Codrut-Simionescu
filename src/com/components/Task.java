@@ -6,6 +6,7 @@ public abstract class Task implements Function
     protected String titlu;
     protected String descriere;
     protected boolean  important;
+    protected int id;
 
     public Task(String _titlu)
     {
@@ -41,6 +42,16 @@ public abstract class Task implements Function
     public boolean getImportant()
     {
         return important;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
     }
 }
 

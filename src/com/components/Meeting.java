@@ -7,6 +7,7 @@ public abstract class Meeting implements Function, Comparable<Meeting>
     protected String descriere;
     protected ZDate data;
     protected boolean important;
+    protected int id;
 
     public Meeting(int zi, int luna, int an)
     {
@@ -42,6 +43,16 @@ public abstract class Meeting implements Function, Comparable<Meeting>
     public boolean getImportant()
     {
         return important;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
     }
 
     public int compareTo(Meeting o)
